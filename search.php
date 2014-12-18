@@ -1,3 +1,6 @@
+<?php
+	$artistName = isset($_GET['searchArtist']) ? $_GET['searchArtist'] : "";
+?>
 <html>
 <header>
 
@@ -33,7 +36,6 @@
 					$varArtist = $_POST['searchArtist'];
 					$errorMessage = "";
 					
-					echo "<div> You chose: {$varArtist} </div>";
 					if(!isset($_POST['searchArtist'])){
 						$errorMessage .="<div>You didn't select an artist yet!</div>";
 					}
@@ -41,8 +43,8 @@
 			?>
 		</div>
 		<div>
-		<h3>All our available music for all artists: </h3>
-		<?php
+	<?php
+		echo "<h3>All our available music for: {$artistName} </h3>";
 		
 		$con = mysqli_connect("localhost","storeuser","123","musicstore");
 
@@ -60,7 +62,12 @@ while($row = mysqli_fetch_array($result)) {
 	$format = $row['format'];
 	$price = $row['price'];
 	
-	echo "<div style = 'margin: 10px'>";
+	if($artist != $artistName){
+		echo "<div style = 'margin: 10px; display: none;'>";
+	} else {
+	echo "<div style = 'margin: 10px;'>";
+	}
+	
 	echo "<form  action= ''>
 				<input type = 'hidden' name = 'listId' value = '$listId'>
 					<input type = 'hidden' name = 'artist' value = '$artist'>
