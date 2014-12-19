@@ -45,10 +45,6 @@ $cookie = $_COOKIE['cart_items_cookie'];
 $cookie = stripslashes($cookie);
 $saved_cart_items = json_decode($cookie, true);
 
-$quant = $_COOKIE['cart_quant_cookie'];
-$quant = stripslashes($quant);
-$saved_quant = json_decode($quant, true);
-
 if(count($saved_cart_items)>0){
 	$ids = "";
 	$quantIds = "";
@@ -58,27 +54,14 @@ if(count($saved_cart_items)>0){
 
 		}
 
-	foreach($saved_quant as $id=>$name){
-		$quantIds = $id;
-		$quantQ = $name;
-		
-			if($quantIds == $one){
-				$four = $quantQ;
-			} elseif($quantIds == $two){
-				$five = $quantQ; } elseif($quantIds == $three){
-				$six = $quantQ;	} else {
-				echo "<div>Fatal Error: Missing ID number, contact webmaster meyer31955@gotoltc.edu</div>";
-				}
-			}
 	$ids = rtrim($ids, ',');
-	$quantIds = rtrim($quantIds, ',');
-	$quantQ = rtrim($quantQ, ',');
 	
 	echo"<a href='index.php'>Back to main page</a>";
     echo "<table>";
  
 
         echo "<tr>";
+			echo "<th>Totals</th>";
             echo "<th>Album Name</th>";
             echo "<th>Price</th>";
 			echo "<th>Quantity</th>";
@@ -95,20 +78,20 @@ if(count($saved_cart_items)>0){
             extract($row);
 			
 			if($id == $one){
-				$quantity = $four;
+				$quantity = $_COOKIE[1];
 			} elseif($id == $two){
-				$quantity = $five; } elseif($id == $three){
-				$quantity = $six;	} else {
+				$quantity = $_COOKIE[2]; } elseif($id == $three){
+				$quantity = $_COOKIE[3];	} else {
 				echo "<div>FATAL ERROR: Missing ID number, contact webmaster meyer31955@gotoltc.edu</div>";
 				}
  
             echo "<tr>";
-				echo "<div style='display:none;'>{$quantity}</div>";
-                echo "<td><div class='id' style='display:none;'>" . $row['id'] . "</div>" . "<div class='album'>" . $row['album'] . "</div></td>";
+				echo "<td><div class='quantity' style='display:none;'>{$quantity}</div></td>";
+                echo "<td><div class='id' style='display:none;'>{$id}</div>" . "<div class='album'>{$album}</div></td>";
                 echo "<td>&#36;{$price}</td>";
 				echo "<td><input type= 'text' style='width: 50px;' value={$quantity}></input></td>";
                 echo"<td>";
-					echo "<button class='quantity'>";
+					echo "<button class='quant'>";
 						echo "Change Quantity";
 					echo "</button>";
 				echo"</td>";
@@ -120,7 +103,7 @@ if(count($saved_cart_items)>0){
             echo "</tr>";
  
             $total_price+=$price*$quantity;
-			$total_price_ship+=$total_price+$ship;
+			$total_price_ship=$total_price+$ship;
         }
  
         echo "<tr>";
@@ -177,12 +160,12 @@ $(document).ready(function(){
 		window.location.href = "addalbum.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
 	});
 	
-	$('.quantity').click(function(){
+	$('.quant').click(function(){
 		var id = $(this).closest('tr').find('.id').text();
 		var album = $(this).closest('tr').find('.album').text();
 		var quantity = $(this).closest('tr').find('input').val();
-		var quantityOrig = $(this).closest('div').find('.quantity').text();
-		window.location.href = "newquant.php?id=" + id + "&album=" + album + "&quantity=" + quantity + "&quantityOrig=" + quantityOrig + "&idtwo=" + id;
+		var quantityOrig = $(this).closest('tr').find('.quantity').text();
+		window.location.href = "newquant.php?id=" + id + "&name=" + album + "&quantity=" + quantity + "&quantityOrig=" + quantityOrig + "&idtwo=" + id;
 	});
 });
 </script>

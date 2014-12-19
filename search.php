@@ -110,7 +110,7 @@ $(document).ready(function(){
 		var id = $(this).closest('tr').find('.id').text();
 		var album = $(this).closest('tr').find('.album').text();
 		var quantity = $(this).closest('tr').find('input').val();
-		window.location.href = "quantity.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
+		window.location.href = "newquant.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
 	});
 });
 </script>
