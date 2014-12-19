@@ -1,7 +1,7 @@
 <html>
-<header>
-
-</header>
+<head>
+<meta name="robots" content="noindex">
+</head>
 <body>
 <div style: "float: left;">
 			<a href="cart.php">
