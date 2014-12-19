@@ -15,7 +15,7 @@
                         $saved_cart_items = json_decode($cookie, true);
                         $cart_count=count($saved_cart_items);
                         ?>
-                        Cart <span class="badge" id="comparison-count"><?php echo $cart_count; ?></span>
+                        Items in cart:  <span class="badge" id="comparison-count"><?php echo $cart_count; ?></span>
             </a>
 		</div>
 	<div style="margin-left: 25%;">
@@ -54,7 +54,16 @@ if (mysqli_connect_errno()) {
 
 $result = mysqli_query($con, "SELECT * FROM musicstore.musiclist ORDER BY id");
 
-
+echo "<table>";
+echo "<tbody>";
+echo "<tr>";
+	echo"<th> Artist </th>";
+	echo"<th> Album Name</th>";
+	echo"<th> Format </th>";
+	echo"<th> Price </th>";
+	echo"<th> Quantity </th>";
+	echo"<th> Add to cart </th>";
+echo "</tr>";
 while($row = mysqli_fetch_array($result)) {
 	$listId = $row['id'];
 	$artist = $row['artist'];
@@ -63,32 +72,28 @@ while($row = mysqli_fetch_array($result)) {
 	$price = $row['price'];
 	
 	if($artist != $artistName){
-		echo "<div style = 'margin: 10px; display: none;'>";
+		echo "<tr style = 'margin: 10px; display: none;'>";
 	} else {
-	echo "<div style = 'margin: 10px;'>";
+	echo "<tr style = 'margin: 10px;'>";
 	}
 	
-	echo "<form  action= ''>
-				<input type = 'hidden' name = 'listId' value = '$listId'>
-					<input type = 'hidden' name = 'artist' value = '$artist'>
-						<input type = 'hidden' name = 'album' value = '$album'>
-							<input type = 'hidden' name = 'format' value = '$format'>
-								<input type = 'hidden' name = 'price' value = '$price'>
-									</form>";
-	echo " Artist: " . "<b>" . $row['artist'] . "</b>";
-	echo " " . "Title: " . "(" . $row['album'] . ")";
-	echo " " . "Format: " . "(" . "<i>" . $row['format'] . "</i>" . ")";
-	echo " " . "Price: " . " $" . $row['price'];
-	echo"<p>";
+	echo "<td>" . $row['artist'] . "</td>";
+	echo "<td>" . $row['album'] . "</td>";
+	echo "<td>" . $row['format'] . "</td>";
+	echo "<td>" . " $" . $row['price'] . "</td>";
+	echo "<td><input type ='text' name='quantity' value='1' style='width: 50px;'></input></td>";
+	echo"<td>";
 		echo"<a href='addalbum.php?id={$listId}&album={$album}' class=''>";
 			echo "Add this album to your cart";
 		echo "</a>";
-	echo"</p>";
+	echo"</td>";
 	echo "<br>";
-	echo "</div>";
+	echo "</tr>";
 }
 
 				mysqli_close($con);
+echo "</tbody>";
+echo "</table>";
 				
 		?>
 		</div>	

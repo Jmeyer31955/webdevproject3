@@ -6,13 +6,12 @@
 <div style: "float: left;">
 			<a href="cart.php">
                         <?php
-                        // count products in cart
                         $cookie = $_COOKIE['cart_items_cookie'];
                         $cookie = stripslashes($cookie);
                         $saved_cart_items = json_decode($cookie, true);
                         $cart_count=count($saved_cart_items);
                         ?>
-                        Cart <span class="badge" id="comparison-count"><?php echo $cart_count; ?></span>
+                        Items in cart:  <span class="badge" id="comparison-count"><?php echo $cart_count; ?></span>
             </a>
 		</div>
 	<div style="margin-left: 25%;">
@@ -52,7 +51,16 @@ if (mysqli_connect_errno()) {
 
 $result = mysqli_query($con, "SELECT * FROM musicstore.musiclist ORDER BY id");
 
-
+echo "<table>";
+echo "<tbody>";
+echo "<tr>";
+	echo"<th> Artist </th>";
+	echo"<th> Album Name</th>";
+	echo"<th> Format </th>";
+	echo"<th> Price </th>";
+	echo"<th> Quantity </th>";
+	echo"<th> Add to cart </th>";
+echo "</tr>";
 while($row = mysqli_fetch_array($result)) {
 	$listId = $row['id'];
 	$artist = $row['artist'];
@@ -60,30 +68,43 @@ while($row = mysqli_fetch_array($result)) {
 	$format = $row['format'];
 	$price = $row['price'];
 	
-	echo "<div style = 'margin: 10px'>";
-	echo "<form  action= ''>
-				<input type = 'hidden' name = 'listId' value = '$listId'>
-					<input type = 'hidden' name = 'artist' value = '$artist'>
-						<input type = 'hidden' name = 'album' value = '$album'>
-							<input type = 'hidden' name = 'format' value = '$format'>
-								<input type = 'hidden' name = 'price' value = '$price'>
-									</form>";
-	echo " Artist: " . "<b>" . $row['artist'] . "</b>";
-	echo " " . "Title: " . "(" . $row['album'] . ")";
-	echo " " . "Format: " . "(" . "<i>" . $row['format'] . "</i>" . ")";
-	echo " " . "Price: " . " $" . $row['price'];
-	echo"<p>";
-		echo"<a href='addalbum.php?id={$listId}&album={$album}' class=''>";
-			echo "Add this album to your cart";
-		echo "</a>";
-	echo"</p>";
+	echo "<tr style = 'margin: 10px'>";
+	echo "<td>" . $row['artist'] . "</td>";
+	echo "<td><div class='id' style='display:none;'>" . $row['id'] . "</div>" . "<div class='album'>" . $row['album'] . "</div></td>";
+	echo "<td>" . $row['format'] . "</td>";
+	echo "<td>" . " $" . $row['price'] . "</td>";
+	echo "<td><input type ='text' name='quantity' value='1' style='width: 50px;'></input></td>";
+	echo"<td>";
+		echo"<button class='cart'>";
+			echo "Add to cart";
+		echo "</button>";
+	echo"</td>";
 	echo "<br>";
-	echo "</div>";
+	echo "</tr>";
 }
 
 				mysqli_close($con);
-				
+echo "</tbody>";
+echo "</table>";
 		?>
-		</div>	
+		</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>		
+$(document).ready(function(){
+	$('.cart').click(function(){
+		var id = $(this).closest('tr').find('.id').text();
+		var album = $(this).closest('tr').find('.album').text();
+		var quantity = $(this).closest('tr').find('input').val();
+		window.location.href = "addalbum.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
+	});
+	
+	$('.quantity').click(function(){
+		var id = $(this).closest('tr').find('.id').text();
+		var album = $(this).closest('tr').find('.album').text();
+		var quantity = $(this).closest('tr').find('input').val();
+		window.location.href = "quantity.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
+	});
+});
+</script>
 </body>
 </html>
