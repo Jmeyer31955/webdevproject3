@@ -9,7 +9,6 @@
 <div style: "float: left;">
 			<a href="cart.php">
                         <?php
-                        // count products in cart
                         $cookie = $_COOKIE['cart_items_cookie'];
                         $cookie = stripslashes($cookie);
                         $saved_cart_items = json_decode($cookie, true);
@@ -78,14 +77,14 @@ while($row = mysqli_fetch_array($result)) {
 	}
 	
 	echo "<td>" . $row['artist'] . "</td>";
-	echo "<td>" . $row['album'] . "</td>";
+	echo "<td><div class='id' style='display:none;'>" . $row['id'] . "</div>" . "<div class='album'>" . $row['album'] . "</div></td>";
 	echo "<td>" . $row['format'] . "</td>";
 	echo "<td>" . " $" . $row['price'] . "</td>";
 	echo "<td><input type ='text' name='quantity' value='1' style='width: 50px;'></input></td>";
 	echo"<td>";
-		echo"<a href='addalbum.php?id={$listId}&album={$album}' class=''>";
-			echo "Add this album to your cart";
-		echo "</a>";
+		echo"<button class='cart'>";
+			echo "Add to cart";
+		echo "</button>";
 	echo"</td>";
 	echo "<br>";
 	echo "</tr>";
@@ -97,5 +96,23 @@ echo "</table>";
 				
 		?>
 		</div>	
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>		
+$(document).ready(function(){
+	$('.cart').click(function(){
+		var id = $(this).closest('tr').find('.id').text();
+		var album = $(this).closest('tr').find('.album').text();
+		var quantity = $(this).closest('tr').find('input').val();
+		window.location.href = "addalbum.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
+	});
+	
+	$('.quantity').click(function(){
+		var id = $(this).closest('tr').find('.id').text();
+		var album = $(this).closest('tr').find('.album').text();
+		var quantity = $(this).closest('tr').find('input').val();
+		window.location.href = "quantity.php?id=" + id + "&album=" + album + "&quantity=" + quantity;
+	});
+});
+</script>
 </body>
 </html>

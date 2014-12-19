@@ -13,6 +13,10 @@
 	$six = "";
 	$ship = isset($_GET['shipping']) ? $_GET['shipping'] : "";
 	
+	if(!isset($_GET['shipping'])){
+						$ship = "0.00";
+					}
+	
 	try {
 		$con = new PDO("mysql:host={$host};dbname={$name}", $username, $password);
 	}
@@ -58,10 +62,7 @@ if(count($saved_cart_items)>0){
 			} elseif($quantIds == $two){
 				$five = $quantQ; } elseif($quantIds == $three){
 				$six = $quantQ;	} else {
-				echo "<div>SOMEONE DONE GOOFED!!</div>";
-				echo "item one id: " . $four;
-				echo "item two id: " . $five;
-				echo "item three id: " . $six;
+				echo "<div>Fatal Error: Missing ID number, contact webmaster meyer31955@gotoltc.edu</div>";
 				}
 			}
 	$ids = rtrim($ids, ',');
@@ -69,9 +70,6 @@ if(count($saved_cart_items)>0){
 	$quantQ = rtrim($quantQ, ',');
 	
 	echo"<a href='index.php'>Back to main page</a>";
-	echo"<div>ID: " . $quantIds . "</div>";
-	echo"<div>Quant: " . $quantQ . "</div>";
-	echo"<div> 4, 5, and 6: " . $four . $five . $six . "</div>";
     echo "<table>";
  
 
@@ -96,12 +94,11 @@ if(count($saved_cart_items)>0){
 			} elseif($id == $two){
 				$quantity = $five; } elseif($id == $three){
 				$quantity = $six;	} else {
-				echo "<div>SOMEONE DONE GOOFED!!</div>";
+				echo "<div>FATAL ERROR: Missing ID number, contact webmaster meyer31955@gotoltc.edu</div>";
 				}
  
             echo "<tr>";
 				echo "<div style='display:none;'>{$quantity}</div>";
-				echo "<div>{$quantity}</div>";
                 echo "<td><div class='id' style='display:none;'>" . $row['id'] . "</div>" . "<div class='album'>" . $row['album'] . "</div></td>";
                 echo "<td>&#36;{$price}</td>";
 				echo "<td><input type= 'text' style='width: 50px;' value={$quantity}></input></td>";
@@ -126,6 +123,7 @@ if(count($saved_cart_items)>0){
                 echo "<td>&#36;{$total_price}</td>";
 		echo"</tr>";
 		echo"<tr><td>-------------------------------------</td></tr>";
+		echo"<tr><td><b>Shipping price: </b></td><td>&#36;{$ship}</td></tr>";
 		echo"<tr><td><b>Total price(shipping included):</b></td><td>&#36;{$total_price_ship}</td></tr>";
                 echo "<tr>";
 				echo"<td><h4>Select a shipping method: </h4>";
